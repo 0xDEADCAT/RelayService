@@ -1,11 +1,13 @@
 using RelayService.Hubs;
 using RelayService.Broker;
+using RelayService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
+builder.Services.AddSingleton<IMessageConsumer, RabbitMQConsumer>();
 
 builder.Services.AddCors(options =>
 {
@@ -51,5 +53,7 @@ app.UseCors();
 app.MapControllers();
 
 app.MapHub<ChatHub>("/chat");
+
+// app.EnableBrokerListener();
 
 app.Run();
