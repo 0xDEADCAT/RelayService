@@ -18,21 +18,20 @@ namespace RelayService.Broker
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
 
-            System.Console.WriteLine("\nConnected to poop factory!\n");
+            System.Console.WriteLine("\nConnected to factory!\n");
 
             _serviceProvider = serviceProvider;
         }
 
         public void SendMessage<T>(T message)
         {
-            System.Console.WriteLine("\nConnected to poop factory!\n");
-
             _channel.QueueDeclare(queue: "chat", durable: false, exclusive: false, autoDelete: false);
 
             var json = JsonConvert.SerializeObject(message);
             var body = Encoding.UTF8.GetBytes(json);
 
             _channel.BasicPublish(exchange: "", routingKey: "chat", body: body);
+            System.Console.WriteLine($"Sent message: {message} to broker\n");
         }
     }
 }

@@ -16,8 +16,8 @@ namespace RelayService.Hubs
 
         public void SendMessage(string user, string message)
         {
-            System.Console.WriteLine("\nPOOP\n");
             _messageProducer.SendMessage(message);
+
         }
     }
 }

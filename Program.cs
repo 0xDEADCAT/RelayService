@@ -12,7 +12,12 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         builder =>
         {
-            builder.WithOrigins("http://frontend:3000")
+            builder.WithOrigins("http://proxy")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+
+            builder.WithOrigins("http://localhost")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
@@ -40,10 +45,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 
-app.MapControllers();
-
 // UseCors must be called before MapHub.
 app.UseCors();
+
+app.MapControllers();
 
 app.MapHub<ChatHub>("/chat");
 
