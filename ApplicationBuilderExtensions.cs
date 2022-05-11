@@ -4,11 +4,11 @@ namespace RelayService
 {
     public static class ApplicationBuilderExtentions
     {
-        public static RabbitMQConsumer Listener { get; set; }
+        public static IMessageConsumer Listener { get; set; }
 
         public static IApplicationBuilder EnableBrokerListener(this IApplicationBuilder app)
         {
-            Listener = app.ApplicationServices.GetService<RabbitMQConsumer>();
+            Listener = app.ApplicationServices.GetService<IMessageConsumer>();
 
             var life = app.ApplicationServices.GetService<IHostApplicationLifetime>();
 

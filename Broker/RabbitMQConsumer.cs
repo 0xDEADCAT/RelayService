@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
 using RelayService.Hubs;
 
 namespace RelayService.Broker
@@ -12,18 +13,28 @@ namespace RelayService.Broker
         protected readonly ConnectionFactory _factory;
         protected readonly IConnection _connection;
         protected readonly IModel _channel;
-
         protected readonly IServiceProvider _serviceProvider;
 
         public RabbitMQConsumer(IServiceProvider serviceProvider)
         {
+            _serviceProvider = serviceProvider;
+
             _factory = new ConnectionFactory() { HostName = "rabbitmq" };
-            _connection = _factory.CreateConnection();
+            const int retries = 3;
+            for (int i = 1; i <= retries; i++)
+            {
+                try
+                {
+                    _connection = _factory.CreateConnection();
+                    break;
+                } catch (BrokerUnreachableException)
+                {
+                    Console.WriteLine($"[{i}/{retries}] Could not connect to RabbitMQ. Retrying...");
+                }
+            }
             _channel = _connection.CreateModel();
 
             System.Console.WriteLine("\nConnected to factory!\n");
-
-            _serviceProvider = serviceProvider;
         }
 
         public void ReceiveMessages()

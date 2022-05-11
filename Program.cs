@@ -54,6 +54,6 @@ app.MapControllers();
 
 app.MapHub<ChatHub>("/chat");
 
-// app.EnableBrokerListener();
+app.EnableBrokerListener();
 
 app.Run();
