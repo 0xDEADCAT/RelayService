@@ -16,7 +16,7 @@ namespace RelayService.Hubs
 
         public void SendMessage(string user, string message)
         {
-            _messageProducer.SendMessage(message);
+            _messageProducer.SendMessage(user, message);
 
         }
     }

@@ -2,6 +2,8 @@ using System.Text;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 
+using RelayService.Model;
+
 namespace RelayService.Broker
 {
     public class RabbitMQProducer : IMessageProducer
@@ -23,9 +25,15 @@ namespace RelayService.Broker
             _serviceProvider = serviceProvider;
         }
 
-        public void SendMessage<T>(T message)
+        public void SendMessage<T>(T user, T content)
         {
             _channel.QueueDeclare(queue: "chat", durable: false, exclusive: false, autoDelete: false);
+
+            Message message = new Message()
+            {
+                User = user.ToString(),
+                Content = content.ToString()
+            };
 
             var json = JsonConvert.SerializeObject(message);
             var body = Encoding.UTF8.GetBytes(json);

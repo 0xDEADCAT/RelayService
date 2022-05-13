@@ -4,7 +4,9 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
+
 using RelayService.Hubs;
+using RelayService.Model;
 
 namespace RelayService.Broker
 {
@@ -51,13 +53,13 @@ namespace RelayService.Broker
 
                 // Get the message from RabbitMQ
                 var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-                var json = JsonConvert.DeserializeObject(message);
+                var json = Encoding.UTF8.GetString(body);
+                var message = JsonConvert.DeserializeObject<Message>(json);
                 
-                System.Console.WriteLine(json);
+                System.Console.WriteLine(message);
 
                 // Send message to all users in SignalR
-                chatHub.Clients.All.SendAsync("messageReceived", "poopster", json);
+                chatHub.Clients.All.SendAsync("messageReceived", message.User, message.Content);
  
             };
  
