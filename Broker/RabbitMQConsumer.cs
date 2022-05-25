@@ -59,7 +59,7 @@ namespace RelayService.Broker
                 System.Console.WriteLine(message);
 
                 // Send message to all users in SignalR
-                chatHub.Clients.All.SendAsync("messageReceived", message.User, message.Content);
+                chatHub.Clients.All.SendAsync("messageReceived", message);
  
             };
  

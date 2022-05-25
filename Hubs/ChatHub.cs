@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 
 using RelayService.Broker;
+using RelayService.Model;
 
 namespace RelayService.Hubs
 {
@@ -14,9 +15,9 @@ namespace RelayService.Hubs
             _messageProducer = messageProducer;
         }
 
-        public void SendMessage(string user, string message)
+        public void SendMessage(Message message)
         {
-            _messageProducer.SendMessage(user, message);
+            _messageProducer.SendMessage<Message>(message);
 
         }
     }

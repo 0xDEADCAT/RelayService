@@ -25,15 +25,9 @@ namespace RelayService.Broker
             _serviceProvider = serviceProvider;
         }
 
-        public void SendMessage<T>(T user, T content)
+        public void SendMessage<T>(Message message)
         {
             _channel.QueueDeclare(queue: "chat", durable: false, exclusive: false, autoDelete: false);
-
-            Message message = new Message()
-            {
-                User = user.ToString(),
-                Content = content.ToString()
-            };
 
             var json = JsonConvert.SerializeObject(message);
             var body = Encoding.UTF8.GetBytes(json);
