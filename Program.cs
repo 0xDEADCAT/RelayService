@@ -6,7 +6,11 @@ using Microsoft.AspNetCore.HttpOverrides;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(hubOptions =>
+{
+    hubOptions.EnableDetailedErrors = true;
+});
+
 builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
 builder.Services.AddSingleton<IMessageConsumer, RabbitMQConsumer>();
 
