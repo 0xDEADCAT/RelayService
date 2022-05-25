@@ -5,6 +5,6 @@ namespace RelayService.Model
         public String MessId { get; set; }
         public String User { get; set; }
         public String Text { get; set; }
-        public DateTime Timestamp { get; set; }
+        public UInt64 Timestamp { get; set; }
     }
 }
