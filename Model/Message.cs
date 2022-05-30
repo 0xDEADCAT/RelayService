@@ -1,10 +1,10 @@
 namespace RelayService.Model
 {
-    public class Message
+    public record Message
     {
-        public String MessId { get; set; }
-        public String User { get; set; }
-        public String Text { get; set; }
-        public UInt64 Timestamp { get; set; }
+        public String MessId { get; init; }
+        public String User { get; init; }
+        public String Text { get; init; }
+        public UInt64 Timestamp { get; init; }
     }
 }
