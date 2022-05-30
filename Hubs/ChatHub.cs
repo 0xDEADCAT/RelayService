@@ -1,24 +1,28 @@
+using Contracts;
+using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 
-using RelayService.Broker;
 using RelayService.Model;
 
 namespace RelayService.Hubs
 {
     public class ChatHub : Hub
     {
-        private readonly IMessageProducer _messageProducer;
+        readonly IPublishEndpoint _publishEndpoint;
 
-        public ChatHub(IMessageProducer messageProducer)
+        public ChatHub(IPublishEndpoint publishEndpoint)
         {
-
-            _messageProducer = messageProducer;
+            _publishEndpoint = publishEndpoint;
         }
 
-        public void SendMessage(Message message)
+        public async Task SendMessage(Message message)
         {
-            _messageProducer.SendMessage<Message>(message);
-
+            await _publishEndpoint.Publish<AddMessage>(new
+            {
+                CommandId = NewId.NextGuid(),
+                Timestamp = DateTime.Now,
+                Message = message
+            });
         }
     }
 }

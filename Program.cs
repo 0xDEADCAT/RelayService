@@ -1,7 +1,8 @@
+using System.Reflection;
 using RelayService.Hubs;
-using RelayService.Broker;
-using RelayService;
 using Microsoft.AspNetCore.HttpOverrides;
+using MassTransit;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,6 @@ builder.Services.AddSignalR(hubOptions =>
 {
     hubOptions.EnableDetailedErrors = true;
 });
-
-builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
-builder.Services.AddSingleton<IMessageConsumer, RabbitMQConsumer>();
 
 builder.Services.AddCors(options =>
 {
@@ -30,6 +28,24 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+
+    var entryAssembly = Assembly.GetEntryAssembly();
+
+    x.AddConsumers(entryAssembly);
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("rabbitmq", "/", h => { 
+            h.Username("guest");
+            h.Password("guest");
+        });
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 var app = builder.Build();
 
@@ -55,10 +71,6 @@ app.UseAuthorization();
 // UseCors must be called before MapHub.
 app.UseCors();
 
-app.MapControllers();
-
 app.MapHub<ChatHub>("/chat");
-
-app.EnableBrokerListener();
 
 app.Run();
