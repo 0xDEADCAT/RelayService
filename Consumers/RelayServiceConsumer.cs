@@ -7,7 +7,7 @@ namespace ChatService.Consumers
     using RelayService.Hubs;
 
     public class RelayServiceConsumer :
-        IConsumer<MessageAdded>
+        IConsumer<MessageAdded>, IConsumer<MessageDeleted>
     {
         protected readonly IServiceProvider _serviceProvider;
 
@@ -21,6 +21,13 @@ namespace ChatService.Consumers
             var chatHub = (IHubContext<ChatHub>)_serviceProvider.GetService(typeof(IHubContext<ChatHub>));
 
             await chatHub.Clients.All.SendAsync("messageReceived", context.Message.Message);
+        }
+
+        public async Task Consume(ConsumeContext<MessageDeleted> context)
+        {
+            var chatHub = (IHubContext<ChatHub>)_serviceProvider.GetService(typeof(IHubContext<ChatHub>));
+
+            await chatHub.Clients.All.SendAsync("messagusDeletus", context.Message.MessId);
         }
     }
 }

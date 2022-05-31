@@ -1,4 +1,4 @@
-namespace RelayService.Model
+namespace RelayService.Models
 {
     public record Message
     {

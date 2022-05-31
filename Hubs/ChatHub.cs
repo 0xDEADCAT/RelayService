@@ -2,7 +2,7 @@ using Contracts;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 
-using RelayService.Model;
+using RelayService.Models;
 
 namespace RelayService.Hubs
 {
@@ -22,6 +22,16 @@ namespace RelayService.Hubs
                 CommandId = NewId.NextGuid(),
                 Timestamp = DateTime.Now,
                 Message = message
+            });
+        }
+
+        public async Task DeleteMessage(String messageId)
+        {
+            await _publishEndpoint.Publish<DeleteMessage>(new
+            {
+                CommandId = NewId.NextGuid(),
+                Timestamp = DateTime.Now,
+                MessId = messageId
             });
         }
     }

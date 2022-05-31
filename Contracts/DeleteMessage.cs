@@ -1,11 +1,9 @@
-using RelayService.Models;
-
 namespace Contracts
 {
-    public interface AddMessage
+    public interface DeleteMessage
     {
         public Guid CommandId { get; }
         public DateTime Timestamp { get; }
-        public Message Message { get; }
+        public String MessId { get; }
     }
 }
