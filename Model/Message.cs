@@ -6,6 +6,7 @@ namespace RelayService.Model
         public String User { get; init; }
         public String Text { get; init; }
         public string image { get; init; }
+        public string mid { get; init; }
         public UInt64 Timestamp { get; init; }
     }
 }
