@@ -1,4 +1,4 @@
-using RelayService.Model;
+using RelayService.Models;
 
 namespace Contracts
 {
