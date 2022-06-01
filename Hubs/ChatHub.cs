@@ -34,5 +34,7 @@ namespace RelayService.Hubs
                 MessId = messageId
             });
         }
+
+        public async Task Typing() => await Clients.All.SendAsync("SomeoneTyping");
     }
 }
