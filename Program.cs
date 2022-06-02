@@ -2,7 +2,7 @@ using System.Reflection;
 using RelayService.Hubs;
 using Microsoft.AspNetCore.HttpOverrides;
 using MassTransit;
-
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSignalR(hubOptions =>
 {
     hubOptions.EnableDetailedErrors = true;
+});
+
+builder.Services.Configure<HubOptions>(options =>
+{
+    options.MaximumReceiveMessageSize = null;
 });
 
 builder.Services.AddCors(options =>
