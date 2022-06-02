@@ -35,6 +35,6 @@ namespace RelayService.Hubs
             });
         }
 
-        public async Task Typing() => await Clients.All.SendAsync("SomeoneTyping");
+        public async Task Typing(String name) => await Clients.All.SendAsync("SomeoneTyping", name);
     }
 }
