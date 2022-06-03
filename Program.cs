@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables(prefix: "HPDS_COMMON_");
+
 // Add services to the container.
 builder.Services.AddSignalR(hubOptions =>
 {
@@ -44,9 +46,9 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("rabbitmq", "/", h => { 
-            h.Username("guest");
-            h.Password("guest");
+        cfg.Host(builder.Configuration["HPDS_COMMON_RABBITMQ_HOST"], builder.Configuration["HPDS_COMMON_RABBITMQ_VHOST"], h => {
+            h.Username(builder.Configuration["HPDS_COMMON_RABBITMQ_USERNAME"]);
+            h.Password(builder.Configuration["HPDS_COMMON_RABBITMQ_PASSWORD"]);
         });
         cfg.ConfigureEndpoints(context);
     });
